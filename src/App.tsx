@@ -233,41 +233,41 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-4 md:py-10 px-2 sm:px-4">
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 flex justify-between items-center text-white">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">전기요금 청구서 자동 분석기</h1>
-            <p className="text-blue-100 text-sm mt-1">다중 개월의 요금 정보도 완벽히 분석하여 하나의 엑셀로 취합합니다</p>
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-white">
+          <div className="flex-1">
+            <h1 className="text-lg sm:text-2xl font-bold tracking-tight">전기요금 청구서 자동 분석기</h1>
+            <p className="text-blue-100 text-xs sm:text-sm mt-1">다중 개월의 요금 정보도 완벽히 분석하여 하나의 엑셀로 취합합니다</p>
           </div>
-          <button 
+          <button
             onClick={() => setShowSettings(!showSettings)}
-            className="p-2 rounded-full hover:bg-white/20 transition-colors"
+            className="p-3 rounded-full hover:bg-white/20 transition-colors self-end sm:self-auto"
             title="Settings"
           >
-            <Settings size={24} />
+            <Settings size={20} className="sm:w-6 sm:h-6" />
           </button>
         </div>
 
         {/* API Settings Panel */}
         {showSettings && (
-          <div className="p-6 bg-blue-50 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-blue-900 mb-3 flex items-center gap-2">
-              <Settings size={18} /> 설정
+          <div className="p-4 sm:p-6 bg-blue-50 border-b border-blue-100">
+            <h2 className="text-base sm:text-lg font-semibold text-blue-900 mb-3 flex items-center gap-2">
+              <Settings size={16} className="sm:w-[18px] sm:h-[18px]" /> 설정
             </h2>
-            <form onSubmit={handleSaveKey} className="flex gap-2">
-              <input 
-                type="password" 
+            <form onSubmit={handleSaveKey} className="flex flex-col sm:flex-row gap-2">
+              <input
+                type="password"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="Gemini API Key 입력"
-                className="flex-1 py-2 px-3 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 py-2.5 sm:py-2 px-3 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 required
               />
-              <button 
+              <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-2 px-4 rounded-lg font-medium transition-colors text-sm sm:text-base"
               >
                 저장
               </button>
@@ -279,22 +279,22 @@ export default function App() {
         )}
 
         {/* Upload Area */}
-        <div className="p-8">
-          <div 
-            className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center transition-colors cursor-pointer ${isDragging ? 'border-blue-500 bg-blue-100' : 'border-gray-300 bg-gray-50 hover:bg-blue-50'}`}
+        <div className="p-4 sm:p-8">
+          <div
+            className={`border-2 border-dashed rounded-xl p-6 sm:p-10 flex flex-col items-center justify-center transition-colors cursor-pointer ${isDragging ? 'border-blue-500 bg-blue-100' : 'border-gray-300 bg-gray-50 hover:bg-blue-50'}`}
             onClick={() => fileInputRef.current?.click()}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            <UploadCloud size={48} className={`${isDragging ? 'text-blue-600' : 'text-blue-500'} mb-4`} />
-            <h3 className="text-lg font-medium text-gray-800 mb-1">여기를 클릭하거나 파일을 드래그하여 업로드</h3>
-            <p className="text-sm text-gray-500">여러 파일 업로드 가능. 단일 파일 내 다중월 내역 완벽 처리!</p>
-            <input 
-              type="file" 
-              multiple 
-              onChange={onFileSelect} 
-              className="hidden" 
+            <UploadCloud size={40} className={`sm:w-12 sm:h-12 ${isDragging ? 'text-blue-600' : 'text-blue-500'} mb-3 sm:mb-4`} />
+            <h3 className="text-base sm:text-lg font-medium text-gray-800 mb-1 text-center px-2">여기를 클릭하거나 파일을 드래그하여 업로드</h3>
+            <p className="text-xs sm:text-sm text-gray-500 text-center px-2">여러 파일 업로드 가능. 단일 파일 내 다중월 내역 완벽 처리!</p>
+            <input
+              type="file"
+              multiple
+              onChange={onFileSelect}
+              className="hidden"
               ref={fileInputRef}
               accept="application/pdf,image/jpeg,image/png,image/webp"
             />
@@ -302,30 +302,30 @@ export default function App() {
 
           {/* Files / Results List */}
           {files.length > 0 && (
-            <div className="mt-8">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium text-gray-800">업로드 내역 ({files.length})</h3>
-                <div className="flex gap-2 flex-wrap justify-end">
-                  <button 
+            <div className="mt-6 sm:mt-8">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 mb-4">
+                <h3 className="text-base sm:text-lg font-medium text-gray-800">업로드 내역 ({files.length})</h3>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  <button
                     onClick={processFiles}
                     disabled={isProcessing}
-                    className={`flex items-center gap-2 ${isProcessing ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'} text-white py-2 px-4 rounded-lg font-medium transition-colors shadow-sm`}
+                    className={`flex items-center justify-center gap-2 ${isProcessing ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'} text-white py-3 sm:py-2 px-4 rounded-lg font-medium transition-colors shadow-sm text-sm sm:text-base touch-manipulation`}
                   >
                     {isProcessing ? <Loader2 size={18} className="animate-spin" /> : <Settings size={18} />}
                     {isProcessing ? '분석 중...' : '데이터 분석 시작'}
                   </button>
-                  <div className="flex items-center gap-2 border-l border-gray-300 pl-3 ml-1">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:border-l sm:border-gray-300 sm:pl-3 sm:ml-1">
                     <input
                       type="text"
                       placeholder="업체명 (파일명 적용)"
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
-                      className="py-1.5 px-3 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 w-36"
+                      className="py-2.5 sm:py-1.5 px-3 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 w-full sm:w-36"
                       title="입력된 업체명이 엑셀 파일명에 포함됩니다."
                     />
-                    <button 
+                    <button
                       onClick={exportToExcel}
-                      className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors shadow-sm"
+                      className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white py-3 sm:py-2 px-4 rounded-lg font-medium transition-colors shadow-sm text-sm sm:text-base touch-manipulation"
                     >
                       <Download size={18} />
                       엑셀로 내보내기
@@ -334,7 +334,8 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="overflow-x-auto rounded-xl border border-gray-200">
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-200">
                 <table className="w-full text-left border-collapse bg-white">
                   <thead>
                     <tr className="bg-gray-50 text-gray-700 text-sm border-b border-gray-200">
@@ -356,8 +357,8 @@ export default function App() {
                                {result.status === 'error' && <span className="inline-flex items-center gap-1 text-xs font-medium text-red-700 bg-red-50 px-2 py-1 rounded-md border border-red-200" title={result.errorMessage}><AlertCircle size={12} />오류</span>}
                             </div>
                             <div className="flex items-start gap-2 text-sm font-medium text-gray-800">
-                              {result.fileName.toLowerCase().endsWith('.pdf') ? 
-                                <FileText size={16} className="text-red-500 shrink-0 mt-0.5" /> : 
+                              {result.fileName.toLowerCase().endsWith('.pdf') ?
+                                <FileText size={16} className="text-red-500 shrink-0 mt-0.5" /> :
                                 <FileImage size={16} className="text-blue-500 shrink-0 mt-0.5" />
                               }
                               <span title={result.fileName} className="line-clamp-2 w-full text-xs text-gray-600 leading-tight">{result.fileName}</span>
@@ -381,15 +382,15 @@ export default function App() {
                           ) : (
                              <div className="flex h-full items-center">
                                <span className="text-sm text-gray-400 italic flex items-center gap-2">
-                                 {result.status === 'pending' ? <><Loader2 size={14} className="animate-spin text-blue-400"/> 데이터를 추출 대기 중입니다</> : 
+                                 {result.status === 'pending' ? <><Loader2 size={14} className="animate-spin text-blue-400"/> 데이터를 추출 대기 중입니다</> :
                                   result.status === 'error' ? '추출에 실패했습니다. 형식이나 이미지를 확인해주세요.' : '추출된 데이터가 없습니다.'}
                                </span>
                              </div>
                           )}
                         </td>
                         <td className="py-4 px-4 text-center align-top">
-                          <button 
-                            onClick={() => removeFile(index)} 
+                          <button
+                            onClick={() => removeFile(index)}
                             className="text-gray-300 hover:text-red-500 hover:bg-red-50 p-2 rounded-lg transition-all"
                             disabled={isProcessing}
                             title="삭제"
@@ -401,6 +402,70 @@ export default function App() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="md:hidden flex flex-col gap-3">
+                {results.map((result, index) => (
+                  <div key={index} className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                    {/* Card Header */}
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs font-semibold text-gray-400">#{index + 1}</span>
+                          {result.status === 'pending' && <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-md border border-gray-200"><Loader2 size={12} className="animate-spin" />대기중</span>}
+                          {result.status === 'success' && <span className="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 px-2 py-1 rounded-md border border-green-200"><CheckCircle size={12} />완료 ({result.data?.length || 0}건)</span>}
+                          {result.status === 'error' && <span className="inline-flex items-center gap-1 text-xs font-medium text-red-700 bg-red-50 px-2 py-1 rounded-md border border-red-200" title={result.errorMessage}><AlertCircle size={12} />오류</span>}
+                        </div>
+                        <div className="flex items-start gap-2">
+                          {result.fileName.toLowerCase().endsWith('.pdf') ?
+                            <FileText size={18} className="text-red-500 shrink-0 mt-0.5" /> :
+                            <FileImage size={18} className="text-blue-500 shrink-0 mt-0.5" />
+                          }
+                          <span className="text-sm text-gray-700 font-medium break-all">{result.fileName}</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => removeFile(index)}
+                        className="text-gray-400 hover:text-red-500 active:text-red-600 p-2 rounded-lg transition-all touch-manipulation ml-2"
+                        disabled={isProcessing}
+                        title="삭제"
+                      >
+                        <Trash2 size={20} />
+                      </button>
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="space-y-2">
+                      {result.status === 'success' && result.data && result.data.length > 0 ? (
+                        result.data.map((item, dIdx) => (
+                          <div key={dIdx} className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="font-bold text-blue-700 text-sm">{item.billingMonth || '미상'}</span>
+                            </div>
+                            <div className="space-y-1.5 text-xs">
+                              <div className="flex justify-between items-center">
+                                <span className="text-gray-600">사용량</span>
+                                <strong className="text-gray-900">{item.usageKwh !== null ? item.usageKwh.toLocaleString() : '-'} kWh</strong>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-gray-600">청구금액</span>
+                                <strong className="text-indigo-600">₩{item.billAmountKrw !== null ? item.billAmountKrw.toLocaleString() : '-'}</strong>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="flex items-center justify-center py-4">
+                          <span className="text-sm text-gray-400 italic flex items-center gap-2">
+                            {result.status === 'pending' ? <><Loader2 size={14} className="animate-spin text-blue-400"/> 데이터 추출 대기 중</> :
+                             result.status === 'error' ? '추출 실패. 형식 확인 필요' : '추출된 데이터 없음'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
