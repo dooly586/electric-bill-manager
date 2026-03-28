@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: "AIzaSyD62ZTxIy3SO9EXVZ4Jpek53cxWee5RWXk",
+  authDomain: "gemini-manager-7a3bf.firebaseapp.com",
+  projectId: "gemini-manager-7a3bf",
+  storageBucket: "gemini-manager-7a3bf.firebasestorage.app",
+  messagingSenderId: "915253412098",
+  appId: "1:915253412098:web:f886ea0faffa9753d6021b",
 };
 
 const app = initializeApp(firebaseConfig);
