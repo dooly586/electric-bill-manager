@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { UploadCloud, FileText, FileImage, Trash2, CheckCircle, AlertCircle, Settings, Download, Loader2, Pencil, Check, X, RefreshCw, MessageSquarePlus } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import { fetchActiveModels } from './firebase';
+import type { GeminiModel } from './firebase';
 
 interface BillingData {
   billingMonth: string;
@@ -263,11 +265,16 @@ export default function App() {
   const [corrections, setCorrections] = useState<Record<number, string>>({});
   const [showCorrectionInput, setShowCorrectionInput] = useState<Record<number, boolean>>({});
   const [reanalyzingIndex, setReanalyzingIndex] = useState<number | null>(null);
+  const [geminiModels, setGeminiModels] = useState<GeminiModel[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const savedKey = localStorage.getItem('gemini_api_key');
     if (savedKey) setApiKey(savedKey);
+    // Firestore에서 활성 모델 목록 로드
+    fetchActiveModels()
+      .then(models => setGeminiModels(models))
+      .catch(() => setGeminiModels([])); // 실패 시 기본값 fallback
   }, []);
 
   const handleSaveKey = (e: React.FormEvent<HTMLFormElement>) => {
@@ -339,10 +346,11 @@ export default function App() {
   };
 
   const callGeminiApi = async (file: File, prompt: string) => {
+    const modelId = geminiModels[0]?.model_id ?? 'gemini-2.5-flash';
     const base64Data = await fileToBase64(file);
     const mimeType = file.type || (file.name.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

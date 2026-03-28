@@ -25,3 +25,8 @@ dist-ssr
 
 # Generated Excel files
 *.xlsx
+
+# Environment variables
+.env
+.env.local
+.env.*.local
