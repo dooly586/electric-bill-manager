@@ -475,7 +475,7 @@ export default function App() {
     });
 
     // 헤더
-    const header = ['년월', '사용기간', '사용량(kWh)', '요금(월)', '비고'];
+    const header = ['년월', '사용기간', '사용량(kWh)', '청구금액', '비고'];
     const aoa: any[][] = [header];
 
     Object.entries(byYear)
