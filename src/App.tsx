@@ -463,11 +463,50 @@ export default function App() {
   const exportToExcel = () => {
     const ok = results.filter(r => r.status === 'success' && r.data?.length);
     if (!ok.length) { alert('성공적으로 추출된 데이터가 없습니다.'); return; }
-    const rows = ok.flatMap(r => r.data!.map(item => ({
-      '년월': item.billingMonth, '사용기간': item.usagePeriod,
-      '사용량(kwh)': item.usageKwh, '요금(월)': item.billAmountKrw, '비고': ''
-    })));
-    const ws = XLSX.utils.json_to_sheet(rows);
+
+    const allData = ok.flatMap(r => r.data!);
+
+    // 년도별 그룹화 (billingMonth 앞 4자리 기준, 정렬)
+    const byYear: Record<string, BillingData[]> = {};
+    allData.forEach(item => {
+      const year = item.billingMonth?.substring(0, 4) || '미상';
+      if (!byYear[year]) byYear[year] = [];
+      byYear[year].push(item);
+    });
+
+    // 헤더
+    const header = ['년월', '사용기간', '사용량(kWh)', '요금(월)', '비고'];
+    const aoa: any[][] = [header];
+
+    Object.entries(byYear)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .forEach(([year, items]) => {
+        const dataStartRow = aoa.length + 1; // 엑셀은 1-indexed
+        items.forEach(item => {
+          aoa.push([item.billingMonth, item.usagePeriod, item.usageKwh ?? '', item.billAmountKrw ?? '', '']);
+        });
+        const dataEndRow = aoa.length; // 데이터 마지막 행
+        // 합계 행: 수식으로 SUM
+        aoa.push([
+          `${year}년 합계`,
+          '',
+          { f: `SUM(C${dataStartRow}:C${dataEndRow})` },
+          { f: `SUM(D${dataStartRow}:D${dataEndRow})` },
+          ''
+        ]);
+      });
+
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+
+    // 컬럼 너비 설정
+    ws['!cols'] = [
+      { wch: 12 }, // 년월
+      { wch: 26 }, // 사용기간
+      { wch: 14 }, // 사용량
+      { wch: 14 }, // 요금
+      { wch: 10 }, // 비고
+    ];
+
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, '세부_전기요금_정리');
     XLSX.writeFile(wb, companyName.trim() ? `${companyName.trim()}_전기요금_정리_통합본.xlsx` : '전기요금_정리_통합본.xlsx');
